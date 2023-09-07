@@ -1,4 +1,3 @@
-<?php include "connect.php"?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,23 +19,42 @@
         <section class="header__section2">
             <input class="header__search" type="search" placeholder="Zoek in de site">
         </section>
+        <a href=""></a>
     </header>
     <main>
-        <article class="news__article">
-            <img src="" alt="" class="article__img">
-            <h2 class="article__title"></h2>
-            <p class="article__description"></p>
-        </article>
-        <article class="news__article">
-            <img src="" alt="" class="article__img">
-            <h2 class="article__title"></h2>
-            <p class="article__description"></p>
-        </article>
-        <article class="news__article">
-            <img src="" alt="" class="article__img">
-            <h2 class="article__title"></h2>
-            <p class="article__description"></p>
-        </article>
+    <?php
+    include_once "connect.php";
+
+    $conn = db_connect();
+
+    $sql = "SELECT * FROM nieuws";
+
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($result as $row) {
+            echo '<article class="news__article">';
+            echo '<img src="' . $row['img'] . '" alt="" class="article__img">';
+            echo '<a class="article__title" href="' . $row['link'] . '">' . $row['title'] . '</a>';
+            echo '<p class="article__description">' . $row['description'] . '</p>';
+            echo '<button class="article__button" onclick="window.location.href = \'http://localhost/techjam/techjam/' . $row['link'] . '\';">Ga naar artikel</button>';
+            echo '</article>';
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+    $conn = null;
+    ?>
     </main>
+    <footer>
+        <p>Contact</p>
+        <p>Adverteren</p>
+        <p>Over tweakers</p>
+        <p>Privacy</p>
+        <p>Cookies</p>
+        <p>Algeneme voorwaarden</p>
+    </footer>
 </body>
 </html>
+

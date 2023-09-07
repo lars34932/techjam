@@ -16,3 +16,4 @@ function db_connect(): object
     }
     return $conn;
 }
+
